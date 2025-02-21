@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Margaréta Világa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Oswald', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #d299ff 50%, #ffcc80 50%);
+            background-size: cover;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .content {
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            display: inline-block;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .content p {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .content button {
+            font-size: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #ffcc80;
+            color: #ffeecc;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .content button:hover {
+            background-color: #e68a00;
+        }
+        .flower {
+            position: absolute;
+            font-size: 40px;
+            animation: float 3s infinite ease-in-out;
+        }
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="content" id="content">
+        <p>Ez egy weboldal tele jókedvvel, napsütéssel és természetesen rengeteg virággal!</p>
+        <button id="addFlowerButton">Adj hozzá még egy virágot!</button>
+    </div>
+    <div class="message" id="message"></div>
+    
+    <script>
+        let flowerPositions = [];
+        function addFlower() {
+            let flowers = ["🌸", "🌼", "🌻", "🌷", "💐", "🥀", "🌺", "🌹", "🌞", "🌈", "💖", "💜", "🌿", "🌾", "🌱", "🌵"];
+            
+            let flower = document.createElement("div");
+            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.className = "flower";
+            
+            let content = document.getElementById("content");
+            let contentRect = content.getBoundingClientRect();
+            let margin = 50;
+            
+            let x, y, overlaps;
+            do {
+                x = Math.random() * (window.innerWidth - 50);
+                y = Math.random() * (window.innerHeight - 50);
+                let messageBox = document.getElementById("message").getBoundingClientRect();
+                overlaps = flowerPositions.some(pos => Math.abs(pos.x - x) < 60 && Math.abs(pos.y - y) < 60) || 
+                (x > messageBox.left - 50 && x < messageBox.right + 50 && y > messageBox.top - 50 && y < messageBox.bottom + 50);
+            } while (
+                overlaps ||
+                (y > contentRect.top - margin && y < contentRect.bottom + margin && x > contentRect.left - margin && x < contentRect.right + margin)
+            );
+            
+            flower.style.left = x + "px";
+            flower.style.top = y + "px";
+            flower.style.position = "absolute";
+            document.body.appendChild(flower);
+            
+            flowerPositions.push({ x, y });
+            showMessage();
+        }
+        
+        function showMessage() {
+            let messages = ["Nagyszerű vagy!", "Meg tudod csinálni!", "Légy a változás, amit látni szeretnél.", "Mosolyogj, és a világ visszamosolyog rád!", "Minden nap egy új lehetőség!", "Bízz magadban!", "Ne add fel, minden nap egy új esély!", "Képes vagy rá, csak higgy magadban!", "A mosolyod fényt hoz a világba!", "Minden akadály egy új lehetőség!", "A szeretet mindig visszatér hozzád!", "A legszebb nap ma van!", "Csak légy önmagad, az mindig elég!", "Minden apró lépés számít!", "Merj nagyot álmodni!", "A jóság mindig utat talál!", "A boldogság benned van!", "Tedd, amit szeretsz, és sikeres leszel!", "Minden perc egy új kezdet!", "Bízz az utadban, az élet mindig vezet!", "A bátorság a legszebb ékszer!", "A szeretet ereje határtalan!", "A csodák az élet részei, csak figyelj!", "Légy hálás minden pillanatért!", "Tégy jót, és a világ visszaadja neked!"];
+            let messageBox = document.getElementById("message");
+            messageBox.style.zIndex = "20";
+            messageBox.textContent = messages[Math.floor(Math.random() * messages.length)];
+            messageBox.style.display = "block";
+            
+        }
+    document.getElementById("addFlowerButton").addEventListener("click", addFlower);
+        document.getElementById("addFlowerButton").addEventListener("touchstart", addFlower);
+    </script>
+</body>
+</html>
